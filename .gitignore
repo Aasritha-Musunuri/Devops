@@ -21,5 +21,5 @@ obj/
 *.tfplan
 
 # Commit personal write-ups; keep generated lesson bytes local
-Daily-Practice/day-01/sample-bytes.bin
-Daily-Practice/day-01/utf8-sample.txt
+Daily-Practice/day-01-how-computers-talk/sample-bytes.bin
+Daily-Practice/day-01-how-computers-talk/utf8-sample.txt

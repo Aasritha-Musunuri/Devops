@@ -32,7 +32,7 @@ try {
 
 Expected: **404**. Window A prints the request and exits because it has served two requests. If you used a different port, update the URL. If the server already exited, restart it first.
 
-Inspect the response construction in `scripts/local-http-server.ps1`. Find `Content-Type`, `Content-Length`, the status line, and the blank line separating headers from the body. This server is intentionally minimal and suitable only for this local lesson.
+Inspect the response construction in `local-http-server.ps1`. Find `Content-Type`, `Content-Length`, the status line, and the blank line separating headers from the body. This server is intentionally minimal and suitable only for this local lesson.
 
 ## Connection errors
 

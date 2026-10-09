@@ -17,7 +17,7 @@ Set-Location .\Daily-Practice\day-01
 In window A:
 
 ```powershell
-& .\scripts\local-http-server.ps1
+& .\local-http-server.ps1
 ```
 
 Expected: `Listening on http://127.0.0.1:8088 (two requests, then stop).` The window stays busy because the server is waiting for a request. If script execution is blocked, inspect `Get-ExecutionPolicy -List`; do not change machine policy. You can paste the script contents into the window instead.

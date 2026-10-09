@@ -1,0 +1,25 @@
+# Local credentials and configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.aws/
+.azure/
+.ssh/
+
+# Local tooling and generated artifacts
+.vs/
+.venv/
+node_modules/
+__pycache__/
+bin/
+obj/
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+
+# Commit personal write-ups; keep generated lesson bytes local
+day-01/sample-bytes.bin
+day-01/utf8-sample.txt

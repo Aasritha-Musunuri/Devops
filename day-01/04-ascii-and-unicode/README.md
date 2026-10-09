@@ -1,6 +1,6 @@
-# Topic 4: ASCII and Unicode
+# ASCII and Unicode
 
-## Understand
+## Overview
 
 ASCII defines 128 character codes; `A` is decimal 65. Unicode assigns code points to characters from many languages. UTF-8 is an encoding that turns Unicode text into bytes. ASCII characters use one byte each in UTF-8; other characters can use multiple bytes.
 
@@ -38,11 +38,4 @@ Format-Hex -Path $textPath
 
 Expected file size: **7 bytes**, with no newline. PowerShell versions have different default text-file encodings, so this exercise selects the encoding explicitly.
 
-DevOps connection: encoding mismatches can corrupt logs, configuration, API payloads, and filenames.
-
-## Checkpoint
-
-1. Why is the file seven bytes even though it displays three symbols?
-2. Explain the difference between Unicode and UTF-8.
-3. Why should you specify encoding when exchanging files between systems?
-4. Does a hex dump show characters or their encoded bytes?
+encoding mismatches can corrupt logs, configuration, API payloads, and filenames.

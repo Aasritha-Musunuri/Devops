@@ -1,6 +1,6 @@
-# Topic 3: Hexadecimal
+# Hexadecimal
 
-## Understand
+## Overview
 
 Hexadecimal, or hex, is base 16. Its digits are `0–9` and `A–F`; A means 10 and F means 15. Each hex digit represents four bits, so two hex digits represent one byte.
 
@@ -8,7 +8,7 @@ Example: hex `41` = 4 × 16 + 1 = decimal 65 = binary `01000001`.
 
 ## Practical
 
-Predict the output before running:
+Decimal, hexadecimal, and binary conversions:
 
 ```powershell
 '{0:X2}' -f 65
@@ -26,15 +26,6 @@ If you completed topic 1, inspect its file again:
 Format-Hex -Path .\sample-bytes.bin
 ```
 
-Explain all four byte values without looking at topic 1's answer.
+The bytes `00 01 41 FF` represent decimal values 0, 1, 65, and 255.
 
-DevOps connection: hex appears in file inspection, packet bytes, hashes, and memory addresses. A hex representation is not encryption.
-
-## Checkpoint
-
-1. Convert `2A` to decimal by hand and verify with PowerShell.
-2. Convert decimal 16 to hex.
-3. Why does one byte fit in two hex digits?
-4. Is hex `10` equal to decimal 10? Explain.
-
-Challenge: convert `FF` to binary through decimal and explain the relationship between the two hex digits and the eight bits.
+hex appears in file inspection, packet bytes, hashes, and memory addresses. A hex representation is not encryption.

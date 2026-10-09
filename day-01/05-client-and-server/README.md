@@ -1,10 +1,10 @@
-# Topic 5: Client versus server
+# Client versus server
 
-## Understand
+## Overview
 
 A **client** initiates a request. A **server** listens for requests and responds. These describe roles; both programs can run on the same computer.
 
-Here, PowerShell's `Invoke-WebRequest` is the client. Our small TCP-based HTTP program is the server. The address `127.0.0.1` is loopback, meaning this computer. Port `8088` identifies the listening endpoint.
+PowerShell's `Invoke-WebRequest` is the client. The local HTTP script is the server. The address `127.0.0.1` is loopback, meaning this computer. Port `8088` identifies the listening endpoint.
 
 ## Practical: run a local server
 
@@ -32,13 +32,8 @@ $response.Content
 
 Expected: status **200** and JSON containing `"message":"Hello from your local server"`. Window A prints the HTTP request line.
 
-Keep window A open for topic 6. The server closes after the second request. To stop early, press Ctrl+C. Do not send real secrets to this teaching server; it uses HTTP without TLS.
+The next HTTP example uses the same server window. The server closes after the second request. To stop early, press Ctrl+C. Do not send real secrets to this teaching server; it uses HTTP without TLS.
 
-## Checkpoint
+## Troubleshooting
 
-1. Which program is the client? Which is the server?
-2. Why can they both run on your laptop?
-3. What do `127.0.0.1` and `8088` identify?
-4. What happens if you request port 8089 where no server is listening?
-
-Troubleshooting: if port 8088 is already in use, inspect `Get-NetTCPConnection -LocalPort 8088 -ErrorAction SilentlyContinue`. Choose a different unused port with `-Port 8090` when starting the server, then use that same port in the client URL. Do not stop an unfamiliar process.
+if port 8088 is already in use, inspect `Get-NetTCPConnection -LocalPort 8088 -ErrorAction SilentlyContinue`. Choose a different unused port with `-Port 8090` when starting the server, then use that same port in the client URL. Do not stop an unfamiliar process.

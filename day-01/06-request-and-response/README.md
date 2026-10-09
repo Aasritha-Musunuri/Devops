@@ -1,6 +1,6 @@
-# Topic 6: Request and response
+# Request and response
 
-## Understand
+## Overview
 
 An HTTP request includes a method, path, headers, and sometimes a body. A response includes a status code, headers, and sometimes a body.
 
@@ -34,18 +34,8 @@ Expected: **404**. Window A prints the request and exits because it has served t
 
 Inspect the response construction in `scripts/local-http-server.ps1`. Find `Content-Type`, `Content-Length`, the status line, and the blank line separating headers from the body. This server is intentionally minimal and suitable only for this local lesson.
 
-## Break and diagnose
+## Connection errors
 
-Once the server has exited, request `/hello` again. You should get a connection error, not an HTTP 404. Explain why: in the first case a server answered; in the second no server was listening on that port.
+Once the server has exited, request `/hello` again. You should get a connection error, not an HTTP 404. A 404 means a server answered but could not find the route. A connection error can occur when no server is listening on the port.
 
-DevOps connection: this distinction helps separate application routing problems from connectivity and service availability problems.
-
-## Checkpoint
-
-1. What method and path did the first request use?
-2. What does HTTP 200 mean in this exercise? What does 404 mean?
-3. Why does `Content-Length` count encoded bytes instead of visible characters?
-4. Is a 404 response the same as connection refused?
-5. Describe the complete journey: client, address, port, request, server, response.
-
-Finish your notes and share the outputs and answers here. We will review Day 1 before creating Day 2.
+this distinction helps separate application routing problems from connectivity and service availability problems.

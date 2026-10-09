@@ -16,7 +16,7 @@ The basics of how computers store information and exchange messages.
 The examples use PowerShell. From the repository root:
 
 ```powershell
-Set-Location .\day-01
+Set-Location .\Daily-Practice\day-01
 ```
 
 The client/server and HTTP examples use `scripts/local-http-server.ps1` in a separate PowerShell window. It listens on `127.0.0.1:8088` and stops after two requests.

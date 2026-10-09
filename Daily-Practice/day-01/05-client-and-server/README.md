@@ -11,7 +11,7 @@ PowerShell's `Invoke-WebRequest` is the client. The local HTTP script is the ser
 Open two PowerShell windows in the repository root. In both, enter:
 
 ```powershell
-Set-Location .\day-01
+Set-Location .\Daily-Practice\day-01
 ```
 
 In window A:

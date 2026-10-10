@@ -1,4 +1,4 @@
-# Daily DevOps Practice
+# DevOps Learning Journey
 
 Daily preparation notes and practical examples. Each day has its own folder with the topics covered.
 

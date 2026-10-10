@@ -20,5 +20,5 @@ Linux commands run in a Linux terminal, such as Ubuntu in WSL. Windows commands 
 For commands that use a local topic file, open PowerShell in the repository root and enter:
 
 ```powershell
-Set-Location .\Daily-Practice\day-01-how-computers-talk
+Set-Location .\DevOps-Learning-Journey\day-01-how-computers-talk
 ```

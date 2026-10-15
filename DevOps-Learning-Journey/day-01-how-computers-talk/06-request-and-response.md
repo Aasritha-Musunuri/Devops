@@ -4,9 +4,42 @@
 
 A request is a message from a client asking a server to do something. In HTTP, it includes a method, a resource path, headers, and sometimes a body.
 
+For example, a student API request can contain:
+
+- **Method:** `GET` describes the action to perform.
+- **Resource path:** `/api/students/101` identifies the resource to access within the API's URL.
+- **Headers:** `Authorization: Bearer ...` supplies authentication information. Other headers can describe the content or client preferences.
+- **Body:** data such as JSON is sent when needed, for example when submitting student details.
+
+## HTTP methods to know
+
+- **GET:** retrieve data, such as viewing student marks.
+- **POST:** submit data for processing, commonly to create a resource such as a student.
+- **PUT:** replace a resource's representation, such as replacing student details. It can also create a resource at the target URL if the API supports it.
+- **PATCH:** partially update a resource, such as changing one field.
+- **DELETE:** request removal of a resource, such as a student.
+
+Clicking a button does not automatically mean POST. The frontend code determines which HTTP method is sent.
+
 ## What is a response?
 
 A response is the server's answer. It includes a status code, headers, and sometimes a body containing content or an error message.
+
+## What are headers and the body?
+
+Headers describe the message. For example, `Content-Type: application/json` says that the body contains JSON data.
+
+The body carries the content itself, such as a web page, a JSON result, or data submitted in a request.
+
+An illustrative API response might look like this:
+
+```text
+Status: 200 OK
+Header: Content-Type: application/json
+Body:   {"status":"healthy"}
+```
+
+These labels explain the parts; they are not the literal HTTP wire format.
 
 ## Example: an application health check
 
@@ -28,15 +61,30 @@ Requests and responses help diagnose failed deployments, API errors, and load ba
 Useful status codes include:
 
 - **200:** the request succeeded.
+- **201:** a resource was created.
+- **400:** the server cannot process the request because of a perceived client error, such as malformed request data.
 - **401:** valid authentication credentials are missing.
 - **403:** the server refuses access.
 - **404:** the requested resource was not found.
+- **405:** the HTTP method is not allowed for the requested resource.
 - **500:** an unexpected server error occurred.
 - **502:** a gateway or proxy received an invalid upstream response.
 - **503:** the service is temporarily unavailable.
 - **504:** a gateway or proxy did not receive an upstream response in time.
 
 A status code is a clue. Application and proxy logs help establish the cause.
+
+## DevOps troubleshooting
+
+Suppose a deployed API is not working:
+
+- **404:** check the API URL, application routing, and Ingress configuration if the deployment uses Ingress.
+- **401/403:** check authentication, authorization, and permissions.
+- **500:** check application logs, exceptions, and dependencies.
+- **502:** check reverse proxy logs, backend availability, and connectivity from the proxy to the backend.
+- **504:** check upstream response times, networking, and timeout settings.
+
+Use these checks to investigate the cause rather than assuming the status code proves which component failed.
 
 ## A simple way to inspect a response
 

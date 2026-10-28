@@ -1,26 +1,14 @@
-# ColorThemeApp — .NET with Docker
+# ColorThemeApp
 
-A small ASP.NET Core application with four color buttons. Clicking a button calls the API, which checks the color and returns it to the page. The browser then changes the preview box's color.
+A simple .NET web app packaged with Docker. Choose red, green, blue, or yellow and the preview box changes to that color.
 
-This project demonstrates building a Docker image and running a web application in a container.
+The page calls `/api/color/{color}`. The API accepts the four supported colors and returns HTTP 400 for anything else.
 
-## How it works
+## Run locally
 
-```text
-Browser: localhost:8080
-       | GET /api/color/blue
-       v
-Docker container: ASP.NET Core on port 8080
-       | { "color": "blue" }
-       v
-Browser updates the preview box
-```
+Install Docker Desktop and use Linux containers. The application uses .NET 9; the Docker build provides the SDK and runtime.
 
-The application uses .NET 9. Docker Desktop must be running with Linux containers. The Docker build includes the SDK, so you do not need to install it locally.
-
-## Build and run
-
-From the repository root:
+Clone this repository, then run:
 
 ```bash
 cd Docker/ColorThemeApp
@@ -28,56 +16,41 @@ docker build -t colorthemeapp:local .
 docker run -d --name color-theme-app -p 127.0.0.1:8080:8080 colorthemeapp:local
 ```
 
-Open **http://localhost:8080** and click the color buttons.
+After the container starts, open `http://localhost:8080` on your computer. This address runs your own copy of the app; it is not a hosted demo.
 
-`127.0.0.1:8080:8080` connects port 8080 on this computer to port 8080 inside the container. Binding to 127.0.0.1 keeps it accessible locally.
+## Docker setup
 
-Try these paths in the browser:
+The Dockerfile has two stages:
 
-- `/api/color/blue` returns `{"color":"blue"}`.
-- `/api/color/BLUE` also returns `{"color":"blue"}`.
-- `/api/color/purple` returns HTTP 400 with `{"message":"Invalid color"}`.
+- The SDK image restores dependencies and builds the application.
+- The ASP.NET runtime image runs the published files as a non-root user.
 
-## What the Dockerfile does
+The project file is copied first so Docker can reuse the restore layer when only the source changes. Build outputs and editor files are excluded through `.dockerignore`.
 
-The **build stage** uses the .NET SDK to restore dependencies and publish the application. Copying the project file before the source lets Docker reuse the dependency restore layer when only application code changes.
+The app listens on port 8080 inside the container. The run command maps it to port 8080 on your computer, with access limited to the local machine.
 
-The **runtime stage** copies the published application into an ASP.NET Core runtime image. The final image does not include the SDK. It runs `ColorThemeApp.dll` as the image's built-in non-root user.
+## API examples
 
-`EXPOSE 8080` documents the port; `docker run -p` actually publishes it. `.dockerignore` keeps build outputs and local editor files out of the build context.
+```text
+GET /api/color/blue    -> 200  {"color":"blue"}
+GET /api/color/BLUE    -> 200  {"color":"blue"}
+GET /api/color/purple  -> 400  {"message":"Invalid color"}
+```
 
-## Inspect and troubleshoot
+## Container commands
+
+Check whether the container is running and view its logs:
 
 ```bash
 docker ps
 docker logs color-theme-app
-docker stop color-theme-app
-docker start color-theme-app
 ```
 
-If port 8080 is busy, use `-p 127.0.0.1:8081:8080` and open http://localhost:8081. If the container exits, check its logs first.
-
-After changing the source, rebuild the image and replace the container:
-
-```bash
-docker build -t colorthemeapp:local .
-docker rm -f color-theme-app
-docker run -d --name color-theme-app -p 127.0.0.1:8080:8080 colorthemeapp:local
-```
-
-To finish:
+Stop and remove it when finished:
 
 ```bash
 docker stop color-theme-app
 docker rm color-theme-app
 ```
 
-## Why this matters in DevOps
-
-An image packages the application and its runtime together. The same built image can be tested and deployed to a compatible container host. Networking, configuration, and secrets still need to be managed for each environment.
-
-This is a local Docker project. It does not include a database, cloud deployment, or CI/CD pipeline.
-
-## Interview explanation
-
-“I containerized a .NET web application with a multi-stage Dockerfile. The SDK stage builds the application, and the final stage contains the runtime and published files. I run it as a non-root user, publish its port, and check container logs when troubleshooting.”
+After editing the source, build the image again and create a new container. If port 8080 is already in use, change the mapping to `127.0.0.1:8081:8080` and use port 8081 in your browser.

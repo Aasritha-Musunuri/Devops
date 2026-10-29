@@ -51,6 +51,17 @@ jobs:
             exit 1
           fi
 
+      - name: Check the website
+        shell: bash
+        run: |
+          set -euo pipefail
+          java -jar target/shipping-quote-1.0.0.jar > /tmp/shipping-quote.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          curl --fail --retry 15 --retry-connrefused --retry-delay 1 http://localhost:8080/health
+          curl --fail http://localhost:8080/ | grep -q 'id="quote-form"'
+          curl --fail 'http://localhost:8080/api/shipping?amount=500' | grep -Fq '"shipping":0'
+
       - name: Save test reports
         if: always()
         uses: actions/upload-artifact@v7

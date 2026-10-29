@@ -1,10 +1,34 @@
 # Java build with Maven
 
-A small shipping calculator built with Java 21. Orders below Rs 500 have a Rs 50 shipping charge. Orders of Rs 500 or more have free shipping. Negative amounts are rejected.
+A shipping calculator with a webpage and a Java 21 backend. Orders below Rs 500 have a Rs 50 shipping charge. Orders of Rs 500 or more have free shipping. Negative amounts are rejected.
 
 The GitHub Actions workflow builds the application, runs the tests, checks the packaged program, and saves the JAR and test reports.
 
 ## Build and run locally
+
+### Open the website with Docker
+
+With Docker Desktop running in Linux container mode, open PowerShell in this project folder:
+
+```powershell
+docker build -t shipping-quote:local .
+docker run -d --name shipping-quote -p 127.0.0.1:8082:8080 shipping-quote:local
+```
+
+Open **http://localhost:8082** on the same computer. Enter an amount or choose an example, then calculate the shipping charge. The page calls the Java API and displays the order amount, shipping, and total. It does not place an order or take payment.
+
+The Docker build runs all 11 tests. The final container contains the Java runtime and application JAR and runs as a non-root user.
+
+Check the server with `docker logs shipping-quote`. Stop and remove it with:
+
+```powershell
+docker stop shipping-quote
+docker rm shipping-quote
+```
+
+After changing the source, rebuild the image and replace the container. If port 8082 is busy, choose another host port, such as `127.0.0.1:8083:8080`.
+
+### Build without creating an application image
 
 Start Docker Desktop and wait until the engine is running. Use Linux containers. These commands run Java and Maven inside Docker, so neither needs to be installed on your computer.
 
@@ -23,11 +47,11 @@ docker run --rm --mount "type=bind,source=$($PWD.Path),target=/workspace" -w /wo
 Look for these lines in the output:
 
 ```text
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0
 BUILD SUCCESS
 ```
 
-Maven compiles the source, runs the five tests, and creates `target/shipping-quote-1.0.0.jar`. Download messages are normal: Maven fetches the libraries and build tools it needs. Without a persistent Maven cache, this command downloads dependencies into each new container.
+Maven compiles the source, runs the tests, and creates `target/shipping-quote-1.0.0.jar`. Download messages are normal: Maven fetches the libraries and build tools it needs. Without a persistent Maven cache, this command downloads dependencies into each new container.
 
 ### Run the application
 
@@ -53,7 +77,7 @@ Order total: Rs 500
 Shipping: Rs 0
 ```
 
-This is a terminal application; the result prints in PowerShell. Use whole rupees. Negative amounts, decimals, and missing arguments return an error.
+With an amount argument, the application runs in terminal mode and prints its result in PowerShell. Without arguments, it starts the web server on port 8080. Use whole rupees. Negative amounts and decimals return an error. Running the JAR without arguments starts the web server.
 
 The mount shares the current project folder with the container at `/workspace`. The generated JAR stays in your local `target/` folder even after `--rm` removes the container. After changing the source, run the build command again before running the JAR.
 
@@ -70,7 +94,7 @@ java -jar target/shipping-quote-1.0.0.jar 499
 
 - `pom.xml`: project name, version, dependency, and build plugin configuration.
 - `src/main/java/`: application code.
-- `src/test/java/`: five unit tests covering the shipping rule.
+- `src/test/java/`: calculator and HTTP tests.
 - `../../.github/workflows/java-maven.yml`: pipeline definition at the repository root.
 - `target/shipping-quote-1.0.0.jar`: generated runnable application, excluded from source control.
 

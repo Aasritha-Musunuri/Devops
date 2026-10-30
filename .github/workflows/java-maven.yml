@@ -95,7 +95,7 @@ jobs:
       cancel-in-progress: false
     defaults:
       run:
-        shell: powershell
+        shell: powershell -NoProfile -ExecutionPolicy RemoteSigned -File {0}
     steps:
       - name: Check out deployment files
         uses: actions/checkout@v7

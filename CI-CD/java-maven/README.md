@@ -114,11 +114,27 @@ Run the JAR and check its output
 Save JAR and test reports
 ```
 
-In GitHub, open **Actions > Java Maven build**. Changes to this project trigger a run. You can also select **Run workflow** on the main branch.
+In GitHub, open **Actions > Java Maven CI/CD**. Changes to this project trigger a run. You can also select **Run workflow** on the main branch.
 
 A failed test stops the build from producing a successful release artifact. Test reports are uploaded even when tests fail, if Maven has generated them. Download the JAR from the successful run's **Artifacts** section to run it with Java 21 or later.
 
-This first exercise covers continuous integration and artifact delivery. It does not deploy to a persistent server. Deployment, SAST, and DAST are separate steps we can add as the practice progresses.
+## Local deployment
+
+The build job runs on a GitHub-hosted Ubuntu runner. After it passes on `main`, the deployment job runs on a Windows self-hosted runner connected to this repository. Pull requests only run the build job.
+
+The deployment job downloads the tested JAR from the same workflow run. `Dockerfile.deploy` packages that JAR with the Java runtime; it does not compile the source again. `deploy.ps1` tags the image with the commit SHA, replaces the `shipping-quote` container, and checks the health endpoint, webpage, and shipping calculation. If those checks fail, it attempts to restore the previous container.
+
+Open **http://localhost:8082** on the runner's computer to use the deployed website. Docker publishes the port only on that machine's loopback interface. This is a local deployment, not a public website.
+
+Keep Docker Desktop and the runner's `run.cmd` terminal open during practice. If the runner is offline, deployment waits in GitHub Actions. Stopping the runner does not stop an already running application container. To disconnect the runner while it is idle, press Ctrl+C in its terminal.
+
+To see which image is running:
+
+```powershell
+docker inspect shipping-quote --format '{{.Config.Image}}'
+```
+
+The image tag should match the commit SHA in the workflow run. SAST, DAST, and infrastructure configuration with Ansible are not included yet.
 
 ## Maven in a few words
 

@@ -1,4 +1,4 @@
-name: Java Maven build
+name: Java Maven CI/CD
 
 on:
   push:
@@ -78,3 +78,35 @@ jobs:
           path: CI-CD/java-maven/target/shipping-quote-1.0.0.jar
           if-no-files-found: error
           retention-days: 7
+
+  deploy:
+    name: Deploy locally
+    needs: build
+    if: >-
+      github.repository == 'Aasritha-Musunuri/Devops' &&
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: [self-hosted, Windows, X64]
+    timeout-minutes: 15
+    concurrency:
+      group: shipping-quote-local
+      cancel-in-progress: false
+    defaults:
+      run:
+        shell: powershell
+    steps:
+      - name: Check out deployment files
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Download tested JAR
+        uses: actions/download-artifact@v8
+        with:
+          name: shipping-quote
+          path: .deployment
+
+      - name: Deploy to Docker Desktop
+        env:
+          DEPLOY_COMMIT: ${{ github.sha }}
+        run: ./CI-CD/java-maven/deploy.ps1 -ArtifactDirectory .deployment -ImageTag $env:DEPLOY_COMMIT

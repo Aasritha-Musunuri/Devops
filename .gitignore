@@ -9,6 +9,8 @@
 .ssh/
 
 # Local tooling and generated artifacts
+actions-runner/
+.deployment/
 .vs/
 .venv/
 node_modules/

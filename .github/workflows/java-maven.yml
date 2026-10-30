@@ -59,8 +59,10 @@ jobs:
           server_pid=$!
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           curl --fail --retry 15 --retry-connrefused --retry-delay 1 http://localhost:8080/health
-          curl --fail http://localhost:8080/ | grep -q 'id="quote-form"'
-          curl --fail 'http://localhost:8080/api/shipping?amount=500' | grep -Fq '"shipping":0'
+          curl --fail --silent --show-error http://localhost:8080/ -o /tmp/shipping-page.html
+          grep -q 'id="quote-form"' /tmp/shipping-page.html
+          curl --fail --silent --show-error 'http://localhost:8080/api/shipping?amount=500' -o /tmp/shipping-quote.json
+          grep -Fq '"shipping":0' /tmp/shipping-quote.json
 
       - name: Save test reports
         if: always()
